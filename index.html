@@ -1,112 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>HFP AI | HealthFirstPriority</title>
+    <title>WQR.AI | Neural Interface</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        tech: {
+                            bg: '#0f172a', // Slate 950
+                            panel: '#1e293b', // Slate 800
+                            accent: '#06b6d4', // Cyan 500
+                            dim: '#94a3b8',
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
-        
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { 
+            background-color: #020617; 
+            color: #e2e8f0; 
+            /* Tech Grid Background */
+            background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center top;
+        }
         
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        @media (max-width: 640px) { ::-webkit-scrollbar { display: none; } }
-        
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .ai-text { font-family: 'Merriweather', serif; font-size: 1rem; line-height: 1.7; color: #334155; white-space: pre-wrap; }
-        @media (max-width: 640px) { .ai-text { font-size: 0.95rem; } }
+        .ai-text { font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; white-space: pre-wrap; }
+        
+        /* Code block styling simulation */
+        .ai-text code { font-family: 'JetBrains Mono', monospace; background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #06b6d4; font-size: 0.85em; }
 
-        .thinking { display: inline-flex; gap: 4px; padding: 8px 0; }
-        .dot { width: 4px; height: 4px; background: #94a3b8; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+        /* Tech Loading Animation */
+        .thinking span {
+            display: inline-block;
+            width: 6px; height: 6px; background-color: #06b6d4;
+            margin-right: 4px; animation: blink 1s infinite;
+        }
+        .thinking span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-        textarea::placeholder { color: #94a3b8; font-size: 13px; font-weight: 500; }
+        textarea::placeholder { color: #475569; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        
+        /* Glassmorphism for panels */
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.5); }
     </style>
 </head>
-<body class="h-[100dvh] flex flex-col overflow-hidden bg-slate-50 relative text-sm md:text-base">
+<body class="h-[100dvh] flex flex-col overflow-hidden relative text-sm md:text-base font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
 
-    <header class="absolute top-4 left-4 z-30 flex items-center gap-2.5">
-        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/20">
-            <i class="fa-solid fa-heart-pulse text-white text-sm"></i>
+    <header class="absolute top-0 left-0 w-full z-30 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-[#020617] to-transparent">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-slate-800 rounded-md border border-slate-700 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                <i class="fa-solid fa-network-wired text-cyan-400 text-sm"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="font-mono font-bold text-slate-100 leading-none tracking-tight text-sm">WQR<span class="text-cyan-400">.AI</span></span>
+                <span class="text-[9px] font-mono text-slate-500 uppercase tracking-widest mt-0.5">Neural Node</span>
+            </div>
         </div>
-        <div class="flex flex-col">
-            <span class="font-bold text-slate-800 leading-tight tracking-tight">HFP<span class="text-blue-600">.ai</span></span>
-            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Internal</span>
+
+        <div class="flex items-center gap-2 bg-slate-900/80 border border-slate-700 pl-2.5 pr-3 py-1 rounded-full shadow-lg">
+            <div id="dot" class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+            <span id="stat" class="text-[9px] font-mono font-bold text-slate-500 tracking-wider">OFFLINE</span>
         </div>
     </header>
 
-    <header class="absolute top-4 right-4 z-30">
-        <div class="flex items-center gap-2 bg-white/80 backdrop-blur border border-slate-200 pl-2 pr-3 py-1 rounded-full shadow-sm">
-            <div id="dot" class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-            <span id="stat" class="text-[9px] md:text-[10px] uppercase font-bold text-slate-400 tracking-wider">OFFLINE</span>
-        </div>
-    </header>
-
-    <main class="flex-1 flex flex-col max-w-3xl mx-auto w-full relative min-h-0">
-        <div id="chat" class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-6 md:space-y-8 scroll-smooth pb-4">
+    <main class="flex-1 flex flex-col max-w-4xl mx-auto w-full relative min-h-0 pt-16">
+        <div id="chat" class="flex-1 overflow-y-auto px-4 md:px-6 py-4 space-y-6 md:space-y-8 scroll-smooth pb-4 custom-scroll">
             
-            <div id="welcome" class="flex flex-col items-center justify-center h-full text-slate-400 select-none transition-opacity duration-300">
-                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 border border-blue-100">
-                    <i class="fa-solid fa-staff-snake text-3xl text-blue-600 opacity-90"></i>
+            <div id="welcome" class="flex flex-col items-center justify-center h-full text-slate-500 select-none transition-opacity duration-300">
+                <div class="relative w-20 h-20 mb-6 group">
+                    <div class="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl group-hover:bg-cyan-500/20 transition-all duration-500"></div>
+                    <div class="relative w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl">
+                        <i class="fa-solid fa-fingerprint text-4xl text-cyan-500 opacity-90"></i>
+                    </div>
                 </div>
-                <h1 class="text-xl font-bold text-slate-800 mb-1">HealthFirstPriority</h1>
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">Research Assistant</p>
-                <p class="text-sm text-slate-500 max-w-xs text-center">Secure environment for distributed LLM testing and medical data analysis.</p>
+                <h1 class="text-2xl font-mono font-bold text-slate-200 mb-2 tracking-tight">Waqar's Intelligence</h1>
+                <p class="text-[10px] font-mono text-cyan-500/70 uppercase tracking-[0.2em] mb-8 border border-cyan-900/50 px-3 py-1 rounded-full bg-cyan-950/20">System Ready</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md w-full">
+                    <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-lg text-center hover:border-cyan-500/30 transition-colors cursor-default">
+                        <i class="fa-solid fa-code text-slate-400 mb-2"></i>
+                        <p class="text-xs text-slate-400">Code Generation</p>
+                    </div>
+                    <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-lg text-center hover:border-cyan-500/30 transition-colors cursor-default">
+                        <i class="fa-solid fa-database text-slate-400 mb-2"></i>
+                        <p class="text-xs text-slate-400">Data Analysis</p>
+                    </div>
+                </div>
             </div>
 
             <div id="msg-container" class="flex flex-col gap-6 w-full"></div>
 
         </div>
         
-        <div class="px-2 md:px-4 pb-3 md:pb-4 pt-2 w-full z-20 bg-slate-50/90 backdrop-blur-sm">
-            <div class="max-w-3xl mx-auto relative flex flex-col gap-2">
+        <div class="px-2 md:px-4 pb-3 md:pb-5 pt-2 w-full z-20">
+            <div class="max-w-4xl mx-auto relative flex flex-col gap-2">
                 
-                <div class="bg-white rounded-[24px] px-3 md:px-4 py-3 relative shadow-sm transition-all focus-within:ring-2 focus-within:ring-blue-100 border border-slate-200">
+                <div class="glass-panel rounded-2xl px-3 md:px-4 py-3 relative shadow-2xl transition-all focus-within:border-cyan-500/50 focus-within:shadow-[0_0_20px_rgba(6,182,212,0.1)]">
                     
-                    <textarea id="in" rows="1" class="w-full bg-transparent border-none outline-none text-sm font-medium text-slate-800 resize-none max-h-32 focus:ring-0 p-0" placeholder="Ask HFP Intelligence..." oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();app.send();}"></textarea>
+                    <textarea id="in" rows="1" class="w-full bg-transparent border-none outline-none text-sm md:text-base text-slate-200 resize-none max-h-32 focus:ring-0 p-0 placeholder:text-slate-600" placeholder="Execute command or query..." oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();app.send();}"></textarea>
                     
-                    <div class="flex items-center justify-between mt-2 gap-2 flex-wrap sm:flex-nowrap">
+                    <div class="flex items-center justify-between mt-3 gap-2 flex-wrap sm:flex-nowrap">
                         
-                        <button onclick="app.clear()" class="flex-none flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 transition-colors border border-slate-200 text-[10px] font-bold group">
-                            <i class="fa-solid fa-rotate-right text-[10px] group-hover:rotate-180 transition-transform"></i> <span>Reset Context</span>
+                        <button onclick="app.clear()" class="flex-none flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-cyan-400 transition-all border border-slate-700/50 hover:border-cyan-500/30 text-[10px] font-mono font-bold group">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i> <span class="hidden sm:inline">PURGE</span>
                         </button>
 
-                        <div class="flex items-center gap-2 relative ml-auto sm:ml-0 max-w-full">
+                        <div class="flex items-center gap-3 relative ml-auto sm:ml-0 max-w-full">
                             
                             <div class="relative flex-shrink min-w-0">
-                                <button onclick="ui.toggleDrop()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-all cursor-pointer group w-full max-w-[140px] md:max-w-none">
-                                    <i class="fa-solid fa-microchip text-blue-500 text-[10px] flex-none"></i>
-                                    <span id="h-model" class="text-[10px] font-bold text-slate-700 truncate block">Loading...</span>
-                                    <i class="fa-solid fa-chevron-up text-[9px] text-slate-400 flex-none ml-auto"></i>
+                                <button onclick="ui.toggleDrop()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-cyan-500/30 rounded-lg transition-all cursor-pointer w-full max-w-[140px] md:max-w-none group">
+                                    <i class="fa-solid fa-microchip text-cyan-600 group-hover:text-cyan-400 text-[10px] flex-none transition-colors"></i>
+                                    <span id="h-model" class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-200 truncate block transition-colors">INITIALIZING...</span>
                                 </button>
 
-                                <div id="drop" class="absolute bottom-full right-0 mb-1 w-64 max-w-[90vw] bg-white border border-slate-200 rounded-xl shadow-xl hidden z-50 flex flex-col overflow-hidden ring-1 ring-black/5">
-                                    <div class="p-2 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                                        <span class="text-[10px] font-bold text-slate-500 uppercase">Active Models</span>
-                                        <span id="cnt" class="text-[9px] bg-blue-100 text-blue-700 font-bold px-1.5 rounded-full">0</span>
+                                <div id="drop" class="absolute bottom-full right-0 mb-2 w-64 max-w-[85vw] bg-[#0f172a] border border-slate-700 rounded-xl shadow-2xl hidden z-50 flex flex-col overflow-hidden ring-1 ring-black/50">
+                                    <div class="p-2 border-b border-slate-800 flex justify-between items-center bg-slate-900">
+                                        <span class="text-[10px] font-mono font-bold text-cyan-500 uppercase">Select Core</span>
+                                        <span id="cnt" class="text-[9px] bg-cyan-900/30 text-cyan-400 border border-cyan-800 font-mono px-1.5 rounded">0</span>
                                     </div>
-                                    <div id="list" class="max-h-48 overflow-y-auto p-1 custom-scroll"></div>
+                                    <div id="list" class="max-h-56 overflow-y-auto p-1 custom-scroll"></div>
                                 </div>
                             </div>
 
-                            <button id="btn" onclick="app.send()" class="w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/30 transition-all flex items-center justify-center shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex-none disabled:shadow-none">
-                                <i class="fa-solid fa-paper-plane text-xs translate-x-[-1px] translate-y-[1px]"></i>
+                            <button id="btn" onclick="app.send()" class="w-9 h-9 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex-none disabled:shadow-none active:scale-95">
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
                             </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="text-center text-[9px] md:text-[10px] font-medium text-slate-400 px-2">
-                    HFP Internal Tool. Verify all medical & data outputs.
+                <div class="flex justify-center items-center gap-2 opacity-60">
+                    <div class="h-px w-8 bg-gradient-to-r from-transparent to-slate-700"></div>
+                    <div class="text-[9px] font-mono text-slate-500 uppercase tracking-widest">Waqar's AI v2.0</div>
+                    <div class="h-px w-8 bg-gradient-to-l from-transparent to-slate-700"></div>
                 </div>
             </div>
         </div>
@@ -114,42 +170,39 @@
 
 <script>
 const $ = id => document.getElementById(id);
-const API = 'https://ai.nomineelife.com/v1'; // Ensure this matches your local server port
+const API = 'https://ai.nomineelife.com/v1'; // Default local address
 const state = { model: "Unknown", list: [], connected: false, history: [], busy: false };
 
 const ui = {
     toggleDrop: () => $('drop').classList.toggle('hidden'),
     
     setStatus: (online, msg) => {
-        $('dot').className = `w-2 h-2 rounded-full ${online ? 'bg-emerald-500' : 'bg-red-500'}`;
-        $('stat').innerText = online ? "SYSTEM ONLINE" : "SYSTEM OFFLINE";
-        $('stat').className = `text-[9px] md:text-[10px] uppercase font-extrabold tracking-wider ${online ? 'text-emerald-700' : 'text-slate-400'}`;
-        // Only update text if msg is provided and valid, otherwise keep current
+        $('dot').className = `w-1.5 h-1.5 rounded-full ${online ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`;
+        $('stat').innerText = online ? "ONLINE" : "OFFLINE";
+        $('stat').className = `text-[9px] font-mono font-bold tracking-wider ${online ? 'text-emerald-500' : 'text-slate-500'}`;
         if(msg) $('h-model').innerText = msg;
     },
     
     setModel: (id) => {
-        console.log("Setting model to:", id);
         state.model = id;
-        $('h-model').innerText = id; // Update Button Text IMMEDIATELY
+        $('h-model').innerText = id;
         $('drop').classList.add('hidden');
-        ui.renderList(); // Re-render list to update green dot
+        ui.renderList();
     },
     
     renderList: () => {
         $('list').innerHTML = '';
         $('cnt').innerText = state.list.length;
-        if(!state.list.length) $('list').innerHTML = '<div class="p-3 text-center text-[10px] text-slate-500 font-medium">No models found</div>';
+        if(!state.list.length) $('list').innerHTML = '<div class="p-3 text-center text-[10px] text-slate-600 font-mono">NO CORES DETECTED</div>';
         
         state.list.forEach(m => {
             const btn = document.createElement('button');
             const active = m.id === state.model;
-            btn.className = `w-full text-left px-2 py-2 text-[10px] flex items-center gap-2 rounded-md transition-all border border-transparent ${active ? 'bg-blue-50 text-blue-700 font-bold border-blue-100' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium'}`;
+            btn.className = `w-full text-left px-3 py-2.5 text-[11px] font-mono flex items-center gap-3 rounded-md transition-all border border-transparent ${active ? 'bg-cyan-900/20 text-cyan-400 border-cyan-800/50' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`;
             btn.innerHTML = `
-                <div class="w-1.5 h-1.5 rounded-full flex-none ${active ? 'bg-blue-600' : 'bg-slate-300'}"></div>
+                <div class="w-1.5 h-1.5 rounded-full flex-none ${active ? 'bg-cyan-400 shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'bg-slate-600'}"></div>
                 <div class="flex-1 break-all">${m.id}</div>
             `;
-            // Capture ID in closure
             btn.onclick = () => ui.setModel(m.id);
             $('list').appendChild(btn);
         });
@@ -161,27 +214,33 @@ const ui = {
         
         if (role === 'user') {
             div.innerHTML = `
-                <div class="bg-blue-600 text-white font-medium px-4 py-2.5 rounded-[20px] rounded-tr-sm text-[14px] max-w-[90%] md:max-w-[85%] shadow-md shadow-blue-900/10 border border-blue-500 break-words leading-relaxed">
+                <div class="bg-cyan-700/20 backdrop-blur-sm text-cyan-100 font-medium px-4 py-3 rounded-2xl rounded-tr-sm text-[14px] max-w-[88%] md:max-w-[80%] border border-cyan-800/50 break-words leading-relaxed shadow-lg">
                     ${text}
                 </div>
             `;
         } else {
             div.innerHTML = `
                 <div class="w-full max-w-full group">
-                    ${thinking ? `
-                        <div id="thk" class="thinking pl-1">
-                            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-                        </div>` : ''}
-                    
-                    <div class="${thinking ? 'hidden' : ''}" id="content-box">
-                        <div class="ai-text pl-1 text-[15px] text-slate-700"></div>
+                    <div class="flex items-center gap-2 mb-1 pl-1">
+                        <i class="fa-solid fa-robot text-[10px] text-cyan-500"></i>
+                        <span class="text-[10px] font-mono text-cyan-500/50 uppercase">WQR.AI Response</span>
                     </div>
                     
-                    <div class="flex flex-wrap gap-1.5 mt-2 opacity-0 transition-opacity duration-500 pl-1" id="metrics"></div>
+                    <div class="bg-[#151f32] border border-slate-800 rounded-xl rounded-tl-sm px-4 py-3 shadow-sm relative overflow-hidden">
+                        ${thinking ? `
+                            <div id="thk" class="thinking py-1">
+                                <span></span><span></span><span></span>
+                            </div>` : ''}
+                        
+                        <div class="${thinking ? 'hidden' : ''}" id="content-box">
+                            <div class="ai-text text-slate-300"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 mt-2 opacity-0 transition-opacity duration-500 pl-1" id="metrics"></div>
                 </div>`;
         }
         
-        // Append to the MESSAGE CONTAINER, not the main chat wrapper
         $('msg-container').appendChild(div);
         $('chat').scrollTop = $('chat').scrollHeight;
         
@@ -196,20 +255,19 @@ const ui = {
 
 const app = {
     init: async (refresh=false) => {
-        if(refresh) $('list').innerHTML = '<div class="p-4 text-center text-xs text-slate-500">Connecting...</div>';
+        if(refresh) $('list').innerHTML = '<div class="p-4 text-center text-[10px] font-mono text-slate-500">SCANNING...</div>';
         try {
-            const res = await fetch(`${API}/models?t=${Date.now()}`);
+            const res = await fetch(`${API}/models`);
             if(!res.ok) throw new Error("API Error");
             const data = await res.json();
             
-            // Handle different API response formats (OpenAI standard vs others)
             const rawList = data.data || data || []; 
             state.list = rawList.map(m => {
                 const id = (m.id || m).split('/').pop().replace('.gguf','');
                 return { id: id };
             });
 
-            if(!state.list.find(m=>m.id===state.model)) state.model = state.list[0]?.id || "No Models";
+            if(!state.list.find(m=>m.id===state.model)) state.model = state.list[0]?.id || "No Cores";
             
             state.connected = true;
             ui.setStatus(true);
@@ -229,14 +287,11 @@ const app = {
         
         if(!state.connected && state.list.length === 0) { 
            await app.init();
-           if(!state.connected) { alert('Cannot connect to HFP Server.'); return; }
+           if(!state.connected) { alert('Cannot connect to Neural Core.'); return; }
         }
         
         state.busy = true;
-        
-        // HIDE Welcome, don't delete it
         $('welcome').style.display = 'none';
-        
         $('in').value = ''; $('in').disabled = true; $('btn').disabled = true; $('btn').classList.add('opacity-50');
         
         state.history.push({ role: 'user', content: text });
@@ -251,7 +306,7 @@ const app = {
                 body: JSON.stringify({ model: state.model, messages: state.history, stream: true })
             });
             
-            if(!res.ok) throw new Error("API Error: " + res.status);
+            if(!res.ok) throw new Error("API Error");
 
             const reader = res.body.getReader();
             const dec = new TextDecoder();
@@ -266,21 +321,10 @@ const app = {
                     if(line.startsWith('data: ') && !line.includes('[DONE]')) {
                         try {
                             const json = JSON.parse(line.slice(6));
-                            
-                            // --- ROBUST MODEL NAME UPDATE ---
                             if(json.model && !serverModel) {
-                                const detectedModel = json.model.split('/').pop().replace('.gguf','');
-                                serverModel = detectedModel;
-                                
-                                // Auto-correct UI if server model differs from selected
-                                if (state.model !== detectedModel) {
-                                    console.log("Model mismatch detected. Correction:", detectedModel);
-                                    state.model = detectedModel;
-                                    $('h-model').innerText = detectedModel;
-                                    ui.renderList();
-                                }
+                                serverModel = json.model.split('/').pop().replace('.gguf','');
+                                if (state.model !== serverModel) ui.setModel(serverModel);
                             }
-                            // ---------------------------------
 
                             if(json.timings?.predicted_n) svrSpeed = json.timings.predicted_n / (json.timings.predicted_ms/1000);
                             if(json.usage?.completion_tokens) svrToks = json.usage.completion_tokens;
@@ -300,18 +344,16 @@ const app = {
             const nTok = svrToks || count;
             const tps = svrSpeed ? svrSpeed.toFixed(2) : (nTok/Math.max((performance.now() - tFirst)/1000, 0.01)).toFixed(2);
             
+            // HUD Style Metrics
             dom.met.innerHTML = `
-                <div class="flex items-center gap-1.5 px-2 py-1 bg-white rounded text-[10px] font-bold text-slate-500 border border-slate-200">
-                    <i class="fa-solid fa-microchip text-slate-400"></i> ${serverModel || state.model}
+                <div class="flex items-center gap-1.5 px-2 py-1 bg-slate-900 rounded text-[9px] font-mono font-bold text-slate-500 border border-slate-800">
+                    <i class="fa-solid fa-microchip text-slate-600"></i> ${serverModel || state.model}
                 </div>
-                <div class="flex items-center gap-1.5 px-2 py-1 bg-white rounded text-[10px] font-bold text-slate-500 border border-slate-200">
-                    <i class="fa-solid fa-layer-group text-slate-400"></i> ${nTok} toks
+                <div class="flex items-center gap-1.5 px-2 py-1 bg-slate-900 rounded text-[9px] font-mono font-bold text-slate-500 border border-slate-800">
+                    <i class="fa-solid fa-terminal text-emerald-500"></i> ${nTok} TKS
                 </div>
-                <div class="flex items-center gap-1.5 px-2 py-1 bg-white rounded text-[10px] font-bold text-slate-500 border border-slate-200">
-                    <i class="fa-solid fa-bolt text-blue-500"></i> ${tps} t/s
-                </div>
-                <div class="flex items-center gap-1.5 px-2 py-1 bg-white rounded text-[10px] font-bold text-slate-500 border border-slate-200">
-                    <i class="fa-regular fa-clock text-slate-400"></i> ${lat}s
+                <div class="flex items-center gap-1.5 px-2 py-1 bg-slate-900 rounded text-[9px] font-mono font-bold text-slate-500 border border-slate-800">
+                    <i class="fa-regular fa-clock text-purple-500"></i> ${lat}s
                 </div>
             `;
             dom.met.classList.remove('opacity-0');
@@ -319,7 +361,7 @@ const app = {
         } catch (e) {
             if(dom.thk) dom.thk.remove();
             dom.box.classList.remove('hidden');
-            dom.txt.innerHTML = `<span class="text-red-600 font-bold text-xs bg-red-50 px-2 py-1 rounded border border-red-100"><i class="fa-solid fa-circle-exclamation mr-1"></i> System Error: ${e.message}</span>`;
+            dom.txt.innerHTML = `<span class="text-red-400 font-mono text-xs bg-red-900/20 px-2 py-1 rounded border border-red-500/30"><i class="fa-solid fa-triangle-exclamation mr-1"></i> PROTOCOL ERROR: ${e.message}</span>`;
         }
         
         state.busy = false; 
@@ -329,15 +371,9 @@ const app = {
         setTimeout(()=>$('in').focus(), 50);
     },
     
-    // FIXED CLEAR FUNCTION
     clear: () => {
-        // 1. Clear history
         state.history = []; 
-        
-        // 2. Clear ONLY the messages container
         $('msg-container').innerHTML = '';
-        
-        // 3. SHOW the welcome screen again
         $('welcome').style.display = 'flex';
     }
 };
@@ -353,3 +389,5 @@ window.onload = () => {
 </script>
 </body>
 </html>
+
+                    
